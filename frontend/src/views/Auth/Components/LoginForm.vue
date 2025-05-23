@@ -1,7 +1,7 @@
 <template>
   <Card class="max-w-2xl w-full">
     <CardHeader>
-      <CardTitle class="text-2xl"> Welcome back </CardTitle>
+      <CardTitle class="text-2xl">{{ t('WELCOME_BACK') }}</CardTitle>
     </CardHeader>
     <CardContent class="">
       <form @submit="onSubmit" class="flex flex-col gap-4">
@@ -9,9 +9,9 @@
 
         <FormField v-slot="{ componentField }" name="email">
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabel>{{ t('EMAIL') }}</FormLabel>
             <FormControl>
-              <Input type="email" placeholder="email@mail.com" v-bind="componentField" />
+              <Input type="email" :placeholder="t('EMAIL_PLACEHOLDER')" v-bind="componentField" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -19,9 +19,9 @@
         <FormField v-slot="{ componentField }" name="password">
           <FormItem>
             <div class="flex items-center">
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{{ t('PASSWORD') }}</FormLabel>
               <router-link to="#" class="ml-auto inline-block text-sm underline"
-                >Forgot your password?
+                >{{ t('FORGOT_PASSWORD') }}
               </router-link>
             </div>
             <FormControl>
@@ -30,11 +30,11 @@
             <FormMessage />
           </FormItem>
         </FormField>
-        <Button type="submit"> Login </Button>
-        <Button variant="outline" class="w-full"> Login with Google </Button>
+        <Button type="submit">{{ t('LOGIN') }}</Button>
+        <Button variant="outline" class="w-full">{{ t('LOGIN_WITH_GOOGLE') }}</Button>
         <div class="mt-4 text-center text-sm">
-          Don't have an account?
-          <router-link to="/register" class="underline"> Sign up </router-link>
+          {{ t('NO_ACCOUNT') }}
+          <router-link to="/register" class="underline">{{ t('SIGN_UP') }}</router-link>
         </div>
       </form>
     </CardContent>
@@ -53,10 +53,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { useAuthStore } from '@/stores/auth.ts'
 import FormSummaryMessage from '@/components/ui/form/FormSummaryMessage.vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const schema = z.object({
-  email: z.string({ message: 'Email is required.' }).email('Invalid email address.'),
-  password: z.string({ message: 'Password is required.' }),
+  email: z.string({ message: t('EMAIL_REQUIRED') }).email(t('EMAIL_INVALID')),
+  password: z.string({ message: t('PASSWORD_REQUIRED') }),
 })
 
 const authStore = useAuthStore()
@@ -68,7 +71,7 @@ const form = useForm({
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await authStore.login(values, form)
+  await authStore.login(values)
   await router.push({ name: 'home' })
 })
 </script>

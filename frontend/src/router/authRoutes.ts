@@ -7,12 +7,12 @@ const authRoutes: RouteRecordRaw[] = [
     meta: { guestOnly: true },
     component: () => import('@/views/Auth/Login.vue'),
   },
-  // {
-  //   path: '/register',
-  //   name: 'register',
-  //   meta: { guestOnly: true },
-  //   component: () => import('@/views/Auth/Register.vue')
-  // }
+  {
+    path: '/register',
+    name: 'register',
+    meta: { guestOnly: true },
+    component: () => import('@/views/Auth/Register.vue'),
+  },
 ]
 
 export default authRoutes

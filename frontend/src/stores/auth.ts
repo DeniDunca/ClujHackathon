@@ -11,7 +11,6 @@ interface LoginData {
 interface RegisterData {
   email: string
   password: string
-  name: string
 }
 
 export const useAuthStore = defineStore('auth', () => {
