@@ -56,5 +56,8 @@
 
   "MENU": "Menu",
   "OPEN_MENU": "Open menu",
-  "CLOSE_MENU": "Close menu"
+  "CLOSE_MENU": "Close menu",
+
+  "HEALTH_NAVIGATOR": "Health\n Navigator",
+  "HEALTH_NAVIGATOR_DESCRIPTION": "AI-powered health navigator for oncological patients — offering personalized prevention guidance, triage support, and medical document analysis through an intelligent chatbot, empowering users to take informed steps toward their care."
 }
