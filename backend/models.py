@@ -16,8 +16,8 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    firstname = Column(String)
-    lastname = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
     email = Column(String, unique=True, index=True)
     password = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -25,10 +25,15 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     role = Column(String)
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'user',
+        'polymorphic_on': 'role'
+    }
+
 class Patient(User):
     __tablename__ = "patients"
 
-    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
     date_of_birth = Column(DateTime)
     gender = Column(String)
     phone_number = Column(String)
@@ -48,7 +53,7 @@ class Patient(User):
 class Doctor(User):
     __tablename__ = "doctors"
 
-    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
     specialization = Column(String)
     license_number = Column(String, unique=True)
     years_of_experience = Column(Integer)
