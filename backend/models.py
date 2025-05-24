@@ -33,7 +33,7 @@ class User(Base):
 class Patient(User):
     __tablename__ = "patients"
 
-    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
     date_of_birth = Column(DateTime)
     gender = Column(String)
     phone_number = Column(String)
@@ -53,7 +53,7 @@ class Patient(User):
 class Doctor(User):
     __tablename__ = "doctors"
 
-    id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
     specialization = Column(String)
     license_number = Column(String, unique=True)
     years_of_experience = Column(Integer)

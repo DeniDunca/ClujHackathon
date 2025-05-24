@@ -53,69 +53,73 @@ class PatientResponse(PatientBase):
 
     class Config:
         orm_mode = True
-
-
-# CRUD Operations
-@router.post("/create-profile", response_model=PatientResponse, status_code=status.HTTP_201_CREATED)
-async def create_patient_profile(
-    patient_data: PatientCreate,
+        
+@router.patch("/{patient_id}", response_model=PatientResponse)
+async def update_patient(
+    patient_id: int,
+    patient_update: PatientUpdate,
     user: user_dependency,
     db: Session = Depends(get_db)
 ):
-    """
-    Create a patient profile for the currently logged-in user.
-    This endpoint requires authentication and will link the patient profile to the user's account.
-    """
-    try:
-        # Check if user is already a patient
-        existing_patient = db.query(Patient).filter(Patient.id == user.id).first()
-        if existing_patient:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User already has a patient profile"
-            )
-        
-        # Check if user has a different role
-        if user.role and user.role.lower() != "patient":
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Cannot create patient profile for user with role: {user.role}"
-            )
-        
-        # Update user role to patient
-        user.role = "patient"
-        user.updated_at = datetime.utcnow()
-        
-        # Create new patient profile
-        db_patient = Patient(
-            id=user.id,  # Use the same ID as the user for the relationship
-            date_of_birth=patient_data.date_of_birth,
-            gender=patient_data.gender,
-            phone_number=patient_data.phone_number,
-            address=patient_data.address,
-            medical_history=patient_data.medical_history,
-            allergies=patient_data.allergies,
-            current_medications=patient_data.current_medications,
-            emergency_contact=patient_data.emergency_contact,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow()
+    """Update a patient's profile. Only the patient themselves can update their profile."""
+    if user.id != patient_id or user.role != "patient":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can only update your own patient profile"
         )
+    
+    try:
+        patient = db.query(Patient).filter(Patient.id == patient_id).first()
+        if not patient:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Patient not found"
+            )
         
-        # Add patient to session
-        db.add(db_patient)
+        # Update only provided fields
+        update_data = patient_update.dict(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(patient, field, value)
         
-        # Commit the transaction
+        patient.updated_at = datetime.utcnow()
         db.commit()
-        
-        # Refresh the patient object to get all fields
-        db.refresh(db_patient)
-        
-        return db_patient
+        db.refresh(patient)
+        return patient
         
     except Exception as e:
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error creating patient profile: {str(e)}"
+            detail=f"Error updating patient: {str(e)}"
+        )
+
+@router.get("/{patient_id}", response_model=PatientResponse)
+async def get_patient(
+    patient_id: int,
+    user: user_dependency,
+    db: Session = Depends(get_db)
+):
+    """Get a patient's profile. Only the patient themselves or their doctors can view the profile."""
+    try:
+        patient = db.query(Patient).filter(Patient.id == patient_id).first()
+        if not patient:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Patient not found"
+            )
+        
+        # Check if user is the patient or a doctor
+        if user.id != patient_id and user.role != "doctor":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You don't have permission to view this patient's profile"
+            )
+        
+        return patient
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error retrieving patient: {str(e)}"
         )
 
