@@ -9,12 +9,6 @@ const darkMode = useDark()
 
 <template>
   <Navbar />
-  <div class="flex gap-2">
-    <router-link to="/login"> Login </router-link>
-    <router-link to="/register"> Register </router-link>
-    <Button @click="darkMode = !darkMode">Toggle dark mode</Button>
-  </div>
-
   <main>
     <RouterView />
   </main>

@@ -52,5 +52,9 @@
   "FULL_NAME_PLACEHOLDER": "John Doe",
   "FULL_NAME_REQUIRED": "Full name is required.",
   "PREFERRED_DATE": "Preferred date",
-  "PREFERRED_DATE_REQUIRED": "Preferred date is required."
+  "PREFERRED_DATE_REQUIRED": "Preferred date is required.",
+
+  "MENU": "Menu",
+  "OPEN_MENU": "Open menu",
+  "CLOSE_MENU": "Close menu"
 }
