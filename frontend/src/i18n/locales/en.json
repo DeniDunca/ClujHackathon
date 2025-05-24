@@ -7,6 +7,7 @@
   "PROFILE": "Profile",
   "MY_ACCOUNT": "My account",
   "SETTINGS": "Settings",
+  "SUBMIT": "Submit",
 
   "WELCOME_BACK": "Welcome back",
   "EMAIL": "Email",
@@ -42,5 +43,14 @@
   "FIND_CANCER_PREVENTION_INFORMATION": "Find cancer prevention information",
   "LEARN_MORE": "Learn more",
   "CHATBOT_DESCRIPTION": "Chat with our AI chatbot to get information about cancer prevention and early detection.",
-  "ENTER_YOUR_MESSAGE": "Enter your message..."
+  "ENTER_YOUR_MESSAGE": "Enter your message...",
+
+  "APPOINTMENT": "Appointment",
+  "APPOINTMENT_DESCRIPTION": "Fill out the form to book an appointment.",
+  "BOOK_APPOINTMENT": "Book appointment",
+  "FULL_NAME": "Full name",
+  "FULL_NAME_PLACEHOLDER": "John Doe",
+  "FULL_NAME_REQUIRED": "Full name is required.",
+  "PREFERRED_DATE": "Preferred date",
+  "PREFERRED_DATE_REQUIRED": "Preferred date is required."
 }

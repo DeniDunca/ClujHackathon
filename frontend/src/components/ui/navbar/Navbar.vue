@@ -4,7 +4,7 @@
     <div id="auth" v-if="!authStore.isAuthenticated">
       <Button v-if="!authStore.isAuthenticated">{{ t('LOGIN') }}</Button>
     </div>
-    <div v-else>
+    <div>
       <ul class="flex flex-row gap-4 items-center">
         <li>
           <router-link to="/documents">{{ t('DOCUMENTS') }}</router-link>
