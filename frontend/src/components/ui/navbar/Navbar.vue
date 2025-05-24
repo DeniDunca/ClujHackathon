@@ -95,8 +95,9 @@ const isSmallScreen = useMediaQuery(`(max-width: ${breakpointsTailwind.sm}px)`)
 
 const authStore = useAuthStore()
 
-const logout = () => {
-  authStore.logout()
+const logout = async () => {
+  console.log('Logging out')
+  await authStore.logout()
 }
 </script>
 
