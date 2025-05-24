@@ -1,6 +1,6 @@
 from datetime import datetime, date
 from typing import Optional, List
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float, ForeignKey, Table, Text, Date
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float, ForeignKey, Table, Text, Date, text
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -27,6 +27,9 @@ class User(Base):
 
     # Add conversations relationship
     conversations = relationship("Conversation", back_populates="user")
+
+    # Add documents relationship
+    documents = relationship("Document", back_populates="user", cascade="all, delete-orphan")
 
     __mapper_args__ = {
         'polymorphic_identity': 'user',
@@ -129,4 +132,17 @@ class Appointment(Base):
 
     # Relationships
     patient = relationship("Patient", back_populates="appointments")
-    doctor = relationship("Doctor", back_populates="appointments") 
+    doctor = relationship("Doctor", back_populates="appointments")
+
+class Document(Base):
+    __tablename__ = "documents"
+
+    id = Column(Integer, primary_key=True, index=True)
+    url = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    summary = Column(Text, nullable=True)
+    created_at = Column(DateTime, nullable=False, server_default=text("now()"))
+    updated_at = Column(DateTime, nullable=False, server_default=text("now()"))
+
+    # Relationships
+    user = relationship("User", back_populates="documents") 
