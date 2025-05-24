@@ -1,10 +1,12 @@
 {
+  "LOGIN": "Login",
+  "LOGOUT": "Logout",
+
   "WELCOME_BACK": "Welcome back",
   "EMAIL": "Email",
   "EMAIL_PLACEHOLDER": "email{'@'}mail.com",
   "PASSWORD": "Password",
   "FORGOT_PASSWORD": "Forgot your password?",
-  "LOGIN": "Login",
   "LOGIN_WITH_GOOGLE": "Login with Google",
   "NO_ACCOUNT": "Don't have an account?",
   "SIGN_UP": "Sign up",
