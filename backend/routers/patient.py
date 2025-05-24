@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import List, Optional, Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -20,7 +20,7 @@ user_dependency = Annotated[User, Depends(get_current_active_user)]
 
 # Pydantic models for request/response
 class PatientBase(BaseModel):
-    date_of_birth: datetime
+    date_of_birth: date
     gender: str
     phone_number: str
     address: str
@@ -33,7 +33,7 @@ class PatientCreate(PatientBase):
     pass
 
 class PatientUpdate(PatientBase):
-    date_of_birth: Optional[datetime] = None
+    date_of_birth: Optional[date] = None
     gender: Optional[str] = None
     phone_number: Optional[str] = None
     address: Optional[str] = None
