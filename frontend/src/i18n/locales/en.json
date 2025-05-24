@@ -1,6 +1,12 @@
 {
   "LOGIN": "Login",
   "LOGOUT": "Logout",
+  "HOME": "Home",
+  "DOCUMENTS": "Documents",
+  "APPOINTMENTS": "Appointments",
+  "PROFILE": "Profile",
+  "MY_ACCOUNT": "My account",
+  "SETTINGS": "Settings",
 
   "WELCOME_BACK": "Welcome back",
   "EMAIL": "Email",
@@ -30,5 +36,11 @@
   "LAST_NAME_MIN": "Last name must be at least 3 characters.",
   "LAST_NAME_MAX": "Last name must be at most 100 characters.",
   "PASSWORDS_MUST_MATCH": "Passwords must match",
-  "PASSWORD_REQUIREMENTS": "Password must be at least {min} characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character ({special})."
+  "PASSWORD_REQUIREMENTS": "Password must be at least {min} characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character ({special}).",
+
+  "PREVENTION": "Prevention",
+  "FIND_CANCER_PREVENTION_INFORMATION": "Find cancer prevention information",
+  "LEARN_MORE": "Learn more",
+  "CHATBOT_DESCRIPTION": "Chat with our AI chatbot to get information about cancer prevention and early detection.",
+  "ENTER_YOUR_MESSAGE": "Enter your message..."
 }

@@ -15,7 +15,9 @@ const darkMode = useDark()
     <Button @click="darkMode = !darkMode">Toggle dark mode</Button>
   </div>
 
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <style scoped></style>
