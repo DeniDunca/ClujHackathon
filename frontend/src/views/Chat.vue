@@ -1,9 +1,6 @@
 <template>
   <div class="flex h-[calc(100vh-5rem)] flex-col w-full lg:max-w-2xl m-auto">
-    <div
-      ref="messagesContainer"
-      class="flex-1 overflow-y-auto w-full"
-    >
+    <div ref="messagesContainer" class="flex-1 overflow-y-auto w-full">
       <Message
         v-for="(message, index) in messages"
         :key="`${message.timestamp}-${index}`"
@@ -21,7 +18,7 @@
         class="flex-1 mr-2"
       />
       <Button type="submit" :disabled="!newMessage.trim()">
-        <SendHorizontal class="h-4 w-4"/>
+        <SendHorizontal class="h-4 w-4" />
       </Button>
     </form>
   </div>
@@ -67,13 +64,17 @@ const scrollToBottom = () => {
 }
 
 // Watch for new messages and auto-scroll if at bottom
-watch(messages, async () => {
-  const wasAtBottom = isAtBottom()
-  await nextTick()
-  if (wasAtBottom) {
-    scrollToBottom()
-  }
-}, { deep: true })
+watch(
+  messages,
+  async () => {
+    const wasAtBottom = isAtBottom()
+    await nextTick()
+    if (wasAtBottom) {
+      scrollToBottom()
+    }
+  },
+  { deep: true },
+)
 
 const onSubmit = (e: Event) => {
   e.preventDefault()

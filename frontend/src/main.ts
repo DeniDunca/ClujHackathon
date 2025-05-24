@@ -9,7 +9,7 @@ import router from './router'
 import axios from 'axios'
 import i18n from '@/i18n'
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 const app = createApp(App)
 

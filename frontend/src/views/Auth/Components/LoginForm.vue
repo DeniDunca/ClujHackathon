@@ -31,7 +31,6 @@
           </FormItem>
         </FormField>
         <Button type="submit">{{ t('LOGIN') }}</Button>
-        <Button variant="outline" class="w-full">{{ t('LOGIN_WITH_GOOGLE') }}</Button>
         <div class="mt-4 text-center text-sm">
           {{ t('NO_ACCOUNT') }}
           <router-link to="/register" class="underline">{{ t('SIGN_UP') }}</router-link>
@@ -45,6 +44,7 @@
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { toast } from 'vue-sonner'
 
 import { Button } from '@/components/ui/button'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -71,7 +71,11 @@ const form = useForm({
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await authStore.login(values)
-  await router.push({ name: 'home' })
+  const success = await authStore.login(values)
+  if (success) {
+    await router.push({ name: 'home' })
+  } else {
+    toast.error(t('LOGIN_FAILED'))
+  }
 })
 </script>

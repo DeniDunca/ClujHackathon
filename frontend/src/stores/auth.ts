@@ -11,11 +11,17 @@ interface LoginData {
 interface RegisterData {
   email: string
   password: string
+  first_name: string
+  last_name: string
+  role: string
 }
 
 export const useAuthStore = defineStore('auth', () => {
   const user = useStorage('user', null, localStorage, { serializer: StorageSerializers.object })
   const token = useStorage('token', null, localStorage, { serializer: StorageSerializers.object })
+  const tokenType = useStorage('tokenType', null, localStorage, {
+    serializer: StorageSerializers.object,
+  })
   const refreshToken = useStorage('refreshToken', null, localStorage, {
     serializer: StorageSerializers.object,
   })
@@ -40,30 +46,57 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading.value = true
 
     try {
-      const response = await axios.post('/api/login', data)
-      user.value = response.data.user
-      token.value = response.data.token
-      refreshToken.value = response.data.refreshToken
+      const formData = new FormData()
+      formData.append('username', data.email)
+      formData.append('password', data.password)
+
+      const response = await axios.post('/auth/token', formData)
+      if (response.status !== 200) {
+        throw new Error('Failed to login')
+      }
+
+      axios.defaults.headers.common['Authorization'] =
+        `${tokenType.value} ${response.data['access_token']}`
+
+      token.value = response.data['access_token']
+      tokenType.value = response.data.token_type
+
+      await initialize()
     } catch (e: Error | any) {
+      isLoading.value = false
       console.error(e)
+      return false
     } finally {
       isLoading.value = false
     }
+    return true
   }
 
   const register = async (data: RegisterData) => {
     isLoading.value = true
 
     try {
-      const response = await axios.post('/api/register', data)
+      const registerResponse = await axios.post('/auth/register', data)
+      if (registerResponse.status !== 201) {
+        throw new Error('Failed to register')
+      }
+
+      const response = await axios.post('auth/token', {
+        email: data.email,
+        password: data.password,
+      })
       user.value = response.data.user
       token.value = response.data.token
-      refreshToken.value = response.data.refreshToken
+
+      await initialize()
     } catch (e: Error | any) {
       console.error(e)
+      isLoading.value = false
+      return false
     } finally {
       isLoading.value = false
     }
+    return true;
   }
 
   const logout = async () => {
@@ -71,27 +104,11 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = null
     refreshToken.value = null
 
-    await axios.get('/api/logout')
+    await axios.post('/auth/logout')
   }
 
   const refreshAuthToken = async () => {
-    if (!refreshToken.value) {
-      console.error('No refresh token available')
-      return
-    }
-
-    try {
-      const response = await axios.post('/auth/refresh', { refreshToken: refreshToken.value })
-      if (response.status === 200) {
-        const { token: newToken, refreshToken: newRefreshToken } = response.data
-
-        token.value = newToken
-        refreshToken.value = newRefreshToken
-      }
-    } catch (err) {
-      console.error('Failed to refresh token:', err)
-      await logout()
-    }
+    return
   }
 
   const initialize = async () => {
