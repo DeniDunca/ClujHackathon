@@ -1,6 +1,8 @@
 <template>
   <div
-    :class="cn('flex w-full gap-3 p-2 max-w-full', role === 'user' ? 'justify-end' : 'justify-start')"
+    :class="
+      cn('flex w-full gap-3 p-2 max-w-full', role === 'user' ? 'justify-end' : 'justify-start')
+    "
   >
     <!-- Assistant Avatar -->
     <div
@@ -9,7 +11,7 @@
         cn(
           'flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md border shadow-sm',
           'bg-primary text-primary-foreground',
-          isLoading && 'animate-pulse'
+          isLoading && 'animate-pulse',
         )
       "
     >
@@ -32,19 +34,27 @@
               ? 'bg-primary text-primary-foreground ml-auto'
               : 'bg-muted text-muted-foreground',
             isDisabled && 'opacity-50',
-            isLoading && role === 'assistant' && 'bg-muted/50'
+            isLoading && role === 'assistant' && 'bg-muted/50',
           )
         "
       >
         <div v-if="isLoading && role === 'assistant'" class="flex items-center gap-2">
           <div class="flex space-x-1">
-            <div class="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-            <div class="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+            <div
+              class="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.3s]"
+            ></div>
+            <div
+              class="w-2 h-2 bg-muted-foreground rounded-full animate-bounce [animation-delay:-0.15s]"
+            ></div>
             <div class="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
           </div>
           <span class="text-xs text-muted-foreground">{{ t('THINKING') }}</span>
         </div>
-        <vue-markdown v-else class="whitespace-pre-wrap break-words break-all chat-message" :source="content">
+        <vue-markdown
+          v-else
+          class="whitespace-pre-wrap break-words break-all chat-message"
+          :source="content"
+        >
         </vue-markdown>
       </div>
 

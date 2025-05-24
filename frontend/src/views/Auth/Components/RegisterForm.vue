@@ -84,7 +84,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuthStore } from '@/stores/auth.ts'
 import FormSummaryMessage from '@/components/ui/form/FormSummaryMessage.vue'
 import { useI18n } from 'vue-i18n'
-import router from "@/router";
+import router from '@/router'
 import { toast } from 'vue-sonner'
 
 const { t } = useI18n()
