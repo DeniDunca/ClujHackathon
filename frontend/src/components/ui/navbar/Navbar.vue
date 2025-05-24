@@ -1,6 +1,10 @@
 <template>
   <nav class="w-screen px-8 py-2 flex flex-row justify-between items-center">
-    <div id="logo" class="font-extrabold text-2xl">Logo</div>
+    <div id="logo" class="font-extrabold text-2xl">
+      <router-link to="/">
+        <img src="/logo.png" alt="Logo" class="h-8 inline-block" />
+      </router-link>
+    </div>
 
     <!-- Desktop Navigation -->
     <div v-if="!isSmallScreen" class="flex items-center gap-4">
