@@ -80,7 +80,6 @@ const form = useForm({
   initialValues: {
     fullName: loggedInUserFullName.value,
     email: authStore.user?.email,
-    preferredDate: new Date(),
   },
 })
 
