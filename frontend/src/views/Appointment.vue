@@ -58,8 +58,15 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import FormSummaryMessage from '@/components/ui/form/FormSummaryMessage.vue'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/stores/auth.ts'
+import { computed } from 'vue'
 
 const { t } = useI18n()
+const authStore = useAuthStore()
+
+const loggedInUserFullName = computed(() => {
+  return authStore.user ? authStore.user?.first_name + ' ' + authStore.user?.last_name : undefined
+})
 
 const schema = z.object({
   fullName: z.string({ message: t('FULL_NAME_REQUIRED') }),
@@ -70,6 +77,11 @@ const schema = z.object({
 const form = useForm({
   validationSchema: toTypedSchema(schema),
   name: 'create-appointment-form',
+  initialValues: {
+    fullName: loggedInUserFullName.value,
+    email: authStore.user?.email,
+    preferredDate: new Date(),
+  },
 })
 
 const onSubmit = form.handleSubmit(async (data) => {

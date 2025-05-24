@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional, List
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float, ForeignKey, Table, Text
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float, ForeignKey, Table, Text, Date, text
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -25,6 +25,12 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     role = Column(String)
 
+    # Add conversations relationship
+    conversations = relationship("Conversation", back_populates="user")
+
+    # Add documents relationship
+    documents = relationship("Document", back_populates="user", cascade="all, delete-orphan")
+
     __mapper_args__ = {
         'polymorphic_identity': 'user',
         'polymorphic_on': 'role'
@@ -34,7 +40,7 @@ class Patient(User):
     __tablename__ = "patients"
 
     id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
-    date_of_birth = Column(DateTime)
+    date_of_birth = Column(Date)
     gender = Column(String)
     phone_number = Column(String)
     address = Column(String)
@@ -47,6 +53,8 @@ class Patient(User):
     doctors = relationship("Doctor", secondary=doctor_patient, back_populates="patients")
     # Relationship with appointments
     appointments = relationship("Appointment", back_populates="patient")
+    # Relationship with conversations
+    conversations = relationship("Conversation", back_populates="user")
 
     __mapper_args__ = {
         'polymorphic_identity': 'patient',
@@ -75,6 +83,39 @@ class Doctor(User):
         'polymorphic_identity': 'doctor',
     }
 
+class Conversation(Base):
+    __tablename__ = "conversations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
+    start_time = Column(DateTime, default=datetime.utcnow)
+    end_time = Column(DateTime, nullable=True)
+    status = Column(String, default="active")  # active, completed, archived
+    context = Column(String, nullable=True)  # Store as JSON string
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    user = relationship("User", foreign_keys=[user_id], back_populates="conversations")
+    messages = relationship("Message", back_populates="conversation", cascade="all, delete-orphan")
+
+class Message(Base):
+    __tablename__ = "messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    conversation_id = Column(Integer, ForeignKey('conversations.id', ondelete='CASCADE'))
+    parent_message_id = Column(Integer, ForeignKey('messages.id', ondelete='SET NULL'), nullable=True)
+    patient_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=True)  # Only for patient questions
+    content = Column(Text)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    message_type = Column(String, default="text")
+    message_metadata = Column(String, nullable=True)  # Store as JSON string
+
+    # Relationships
+    conversation = relationship("Conversation", back_populates="messages")
+    parent_message = relationship("Message", remote_side=[id], backref="response")
+    patient = relationship("User", foreign_keys=[patient_id])
+
 class Appointment(Base):
     __tablename__ = "appointments"
 
@@ -91,4 +132,17 @@ class Appointment(Base):
 
     # Relationships
     patient = relationship("Patient", back_populates="appointments")
-    doctor = relationship("Doctor", back_populates="appointments") 
+    doctor = relationship("Doctor", back_populates="appointments")
+
+class Document(Base):
+    __tablename__ = "documents"
+
+    id = Column(Integer, primary_key=True, index=True)
+    url = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    summary = Column(Text, nullable=True)
+    created_at = Column(DateTime, nullable=False, server_default=text("now()"))
+    updated_at = Column(DateTime, nullable=False, server_default=text("now()"))
+
+    # Relationships
+    user = relationship("User", back_populates="documents") 

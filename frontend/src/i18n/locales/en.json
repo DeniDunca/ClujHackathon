@@ -15,6 +15,7 @@
   "PASSWORD": "Password",
   "FORGOT_PASSWORD": "Forgot your password?",
   "LOGIN_WITH_GOOGLE": "Login with Google",
+  "LOGIN_FAILED": "Login failed. Please check your credentials.",
   "NO_ACCOUNT": "Don't have an account?",
   "SIGN_UP": "Sign up",
   "EMAIL_REQUIRED": "Email is required.",
@@ -59,5 +60,64 @@
   "CLOSE_MENU": "Close menu",
 
   "HEALTH_NAVIGATOR": "Health\n Navigator",
-  "HEALTH_NAVIGATOR_DESCRIPTION": "AI-powered health navigator for oncological patients — offering personalized prevention guidance, triage support, and medical document analysis through an intelligent chatbot, empowering users to take informed steps toward their care."
+  "HEALTH_NAVIGATOR_DESCRIPTION": "AI-powered health navigator for oncological patients — offering personalized prevention guidance, triage support, and medical document analysis through an intelligent chatbot, empowering users to take informed steps toward their care.",
+
+  "BREAST_CANCER_TITLE": "Breast Cancer Guidance: Prevention, Detection & When to Seek Medical Help",
+
+  "PREVENTION_SECTION_TITLE": "Cancer Prevention: What You Can Do",
+  "PREVENTION_SECTION_DESCRIPTION": "Breast cancer risk can be lowered through a combination of lifestyle choices, awareness, and proactive health management.",
+
+  "LIFESTYLE_DIET_TITLE": "Lifestyle & Diet",
+  "LIFESTYLE_DIET_WEIGHT": "Maintain a healthy weight, especially after menopause",
+  "LIFESTYLE_DIET_MEDITERRANEAN": "Follow a Mediterranean-style diet: rich in fruits, vegetables, whole grains, olive oil, and lean protein",
+  "LIFESTYLE_DIET_ALCOHOL": "Limit alcohol to no more than 1 drink per day",
+  "LIFESTYLE_DIET_SMOKING": "Avoid smoking and exposure to tobacco smoke",
+
+  "PHYSICAL_ACTIVITY_TITLE": "Physical Activity",
+  "PHYSICAL_ACTIVITY_AEROBIC": "Engage in at least 150 minutes of moderate aerobic exercise or 75 minutes of vigorous exercise per week",
+  "PHYSICAL_ACTIVITY_STRENGTH": "Include strength training twice a week",
+
+  "FAMILY_HISTORY_TITLE": "Family History & Genetics",
+  "FAMILY_HISTORY_COUNSELING": "If you have a first-degree relative (mother, sister, daughter) with breast or ovarian cancer, talk to your doctor about genetic counseling and BRCA1/BRCA2 testing",
+  "FAMILY_HISTORY_HIGH_RISK": "Women with high genetic risk may consider enhanced surveillance, chemoprevention, or even prophylactic surgery under medical guidance",
+
+  "EARLY_SIGNS_SECTION_TITLE": "Recognizing Early Signs and Symptoms",
+  "EARLY_SIGNS_SUBTITLE": "Common Early Signs:",
+  "EARLY_SIGNS_LUMP": "A new lump in the breast or underarm area",
+  "EARLY_SIGNS_SWELLING": "Swelling of part or all of the breast (even without a lump)",
+  "EARLY_SIGNS_DIMPLING": "Irritation or dimpling of breast skin (like an orange peel)",
+  "EARLY_SIGNS_PAIN": "Pain in the breast or nipple",
+  "EARLY_SIGNS_NIPPLE": "Inverted nipple or nipple discharge (not breast milk)",
+  "EARLY_SIGNS_SKIN": "Redness, scaling, or thickening of the nipple or breast skin",
+  "EARLY_SIGNS_NOTE": "Many of these symptoms are not cancer, but should always be evaluated by a doctor for peace of mind.",
+
+  "WHEN_TO_SEE_DOCTOR_TITLE": "When to See a Doctor",
+  "WHEN_TO_SEE_DOCTOR_SUBTITLE": "Seek medical advice immediately if:",
+  "WHEN_TO_SEE_DOCTOR_LUMP": "You detect any lump, change in breast shape, or unusual nipple discharge",
+  "WHEN_TO_SEE_DOCTOR_DISCOMFORT": "Any persistent discomfort, swelling, or redness that does not go away",
+  "WHEN_TO_SEE_DOCTOR_MAMMOGRAM": "A mammogram result shows abnormalities, even if you're asymptomatic",
+
+  "ROUTINE_SCREENING_TITLE": "Routine Screening:",
+  "SCREENING_25_39": "Clinical breast exams every 1–3 years",
+  "SCREENING_40_49": "Discuss risks and screening needs individually",
+  "SCREENING_50_74": "Mammograms every 1–2 years",
+  "SCREENING_HIGH_RISK": "May need MRI or earlier/frequent screening",
+
+  "FINAL_ADVICE_TITLE": "Final Words of Advice",
+  "FINAL_ADVICE_PROACTIVE": "Stay proactive — early detection significantly improves treatment outcomes",
+  "FINAL_ADVICE_KNOW_NORMAL": "Know your normal so you can spot changes early",
+  "FINAL_ADVICE_ENCOURAGE": "Encourage your loved ones to be screened too",
+  "FINAL_ADVICE_MORE_INFO": "For more detailed information, you can refer to the {esmoLink} and {nccnLink}.",
+  "FINAL_ADVICE_ESMO": "ESMO Patient Guide on Breast Cancer and National Comprehensive Cancer Network.",
+  "FINAL_ADVICE_NCCN": "National Comprehensive Cancer Network",
+
+  "EDUCATIONAL_VIDEO_TITLE": "Educational Video",
+  "WATCH_VIDEO": "Watch Video",
+
+  "AGE_GROUP": "Age Group",
+  "SCREENING_RECOMMENDATION": "Screening Recommendation",
+  "AGE_25_39": "25–39",
+  "AGE_40_49": "40–49",
+  "AGE_50_74": "50–74",
+  "HIGH_RISK_PATIENTS": "High-risk patients"
 }
