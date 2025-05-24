@@ -123,7 +123,9 @@
         </div>
 
         <!-- Important Note -->
-        <div class="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div
+          class="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
+        >
           <div class="flex items-start gap-2">
             <Info class="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
             <p class="text-sm text-blue-800 dark:text-blue-200 font-medium">
@@ -138,11 +140,7 @@
             <Play class="h-4 w-4 text-red-600" />
             {{ t('EDUCATIONAL_VIDEO_TITLE') }}
           </h3>
-          <Button
-            variant="outline"
-            class="flex items-center gap-2"
-            @click="openVideo"
-          >
+          <Button variant="outline" class="flex items-center gap-2" @click="openVideo">
             <Play class="h-4 w-4" />
             {{ t('WATCH_VIDEO') }}
           </Button>
@@ -160,7 +158,9 @@
       </CardHeader>
       <CardContent class="space-y-6">
         <div>
-          <h3 class="text-lg font-semibold mb-3 text-red-600">{{ t('WHEN_TO_SEE_DOCTOR_SUBTITLE') }}</h3>
+          <h3 class="text-lg font-semibold mb-3 text-red-600">
+            {{ t('WHEN_TO_SEE_DOCTOR_SUBTITLE') }}
+          </h3>
           <ul class="space-y-2">
             <li class="flex items-start gap-2">
               <AlertTriangle class="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
@@ -209,7 +209,9 @@
                   <td class="border border-border px-4 py-2">{{ t('SCREENING_50_74') }}</td>
                 </tr>
                 <tr class="bg-muted/50">
-                  <td class="border border-border px-4 py-2 font-medium">{{ t('HIGH_RISK_PATIENTS') }}</td>
+                  <td class="border border-border px-4 py-2 font-medium">
+                    {{ t('HIGH_RISK_PATIENTS') }}
+                  </td>
                   <td class="border border-border px-4 py-2">{{ t('SCREENING_HIGH_RISK') }}</td>
                 </tr>
               </tbody>
@@ -248,7 +250,11 @@
           <p class="text-sm text-muted-foreground italic">
             <i18n-t keypath="FINAL_ADVICE_MORE_INFO" tag="span">
               <template #esmoLink>
-                <a href="https://www.esmo.org/for-patients/patient-guides/breast-cancer" target="_blank" class="underline">
+                <a
+                  href="https://www.esmo.org/for-patients/patient-guides/breast-cancer"
+                  target="_blank"
+                  class="underline"
+                >
                   {{ t('FINAL_ADVICE_ESMO') }}
                 </a>
               </template>
@@ -267,13 +273,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
   Shield,
@@ -289,7 +289,7 @@ import {
   AlertTriangle,
   Calendar,
   Heart,
-  CheckCircle2
+  CheckCircle2,
 } from 'lucide-vue-next'
 
 const { t } = useI18n()

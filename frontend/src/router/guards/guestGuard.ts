@@ -13,6 +13,10 @@ const guestGuard = (
   const authStore = useAuthStore()
 
   if (to.meta.guestOnly && authStore.isAuthenticated) {
+    if (to.meta.authenticatedRedirect) {
+      next(to.meta.authenticatedRedirect)
+      return
+    }
     next({ name: 'home' })
   } else {
     next()
