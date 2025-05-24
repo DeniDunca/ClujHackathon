@@ -96,7 +96,7 @@ export const useAuthStore = defineStore('auth', () => {
     } finally {
       isLoading.value = false
     }
-    return true;
+    return true
   }
 
   const logout = async () => {
@@ -125,6 +125,7 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = response.data
       }
     } catch (err) {
+      await logout()
       await refreshAuthToken()
     }
   }

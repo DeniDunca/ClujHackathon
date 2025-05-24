@@ -25,26 +25,35 @@
       />
       <Button
         type="submit"
-        :disabled="!(newMessage.trim()) || isWaitingForResponse"
+        :disabled="!newMessage.trim() || isWaitingForResponse"
         :class="{ 'opacity-50 cursor-not-allowed': isWaitingForResponse }"
       >
         <Loader2 v-if="isWaitingForResponse" class="h-4 w-4 animate-spin" />
-        <SendHorizontal v-else class="h-4 w-4"/>
+        <SendHorizontal v-else class="h-4 w-4" />
       </Button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import {type Ref, ref, nextTick, watch, onMounted, onBeforeMount, computed, TransitionGroup} from 'vue'
-import {Message} from '@/components/ui/message'
-import {Input} from '@/components/ui/input'
-import {useI18n} from 'vue-i18n'
-import {Button} from '@/components/ui/button'
-import {SendHorizontal, Loader2} from 'lucide-vue-next'
-import axios from "axios";
+import {
+  type Ref,
+  ref,
+  nextTick,
+  watch,
+  onMounted,
+  onBeforeMount,
+  computed,
+  TransitionGroup,
+} from 'vue'
+import { Message } from '@/components/ui/message'
+import { Input } from '@/components/ui/input'
+import { useI18n } from 'vue-i18n'
+import { Button } from '@/components/ui/button'
+import { SendHorizontal, Loader2 } from 'lucide-vue-next'
+import axios from 'axios'
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 const newMessage = ref('')
 const messagesContainer = ref<HTMLElement>()
@@ -59,16 +68,15 @@ interface ChatMessage {
 }
 
 const messages: Ref<ChatMessage[]> = ref([])
-const conversation = ref();
+const conversation = ref()
 
 // Computed property that includes loading states
 const allMessages = computed(() => {
   // Create new objects to avoid mutating originals
   const result = messages.value.map((message, index) => ({
     ...message,
-    isDisabled: isWaitingForResponse.value &&
-                index === messages.value.length - 1 &&
-                message.role === 'user'
+    isDisabled:
+      isWaitingForResponse.value && index === messages.value.length - 1 && message.role === 'user',
   }))
 
   // Add loading assistant message if waiting for response
@@ -78,7 +86,7 @@ const allMessages = computed(() => {
       content: '',
       timestamp: Date.now(),
       isLoading: true,
-      isDisabled: false
+      isDisabled: false,
     })
   }
 
@@ -95,7 +103,7 @@ const getExistingConversation = async () => {
 // Check if user is at bottom of scroll
 const isAtBottom = (): boolean => {
   if (!messagesContainer.value) return true
-  const {scrollTop, scrollHeight, clientHeight} = messagesContainer.value
+  const { scrollTop, scrollHeight, clientHeight } = messagesContainer.value
   return scrollTop + clientHeight >= scrollHeight - 10 // 10px threshold
 }
 
@@ -115,7 +123,7 @@ watch(
       scrollToBottom()
     }
   },
-  {deep: true},
+  { deep: true },
 )
 
 const onSubmit = (e: Event) => {
@@ -128,7 +136,7 @@ const onSubmit = (e: Event) => {
 }
 
 onBeforeMount(async () => {
-  await getExistingConversation();
+  await getExistingConversation()
   if (!conversation.value) {
     const newConversation = await axios.post('/conversations', {})
     conversation.value = newConversation.data
@@ -145,7 +153,7 @@ const sendMessage = async (content: string) => {
   messages.value.push({
     role: 'user',
     content,
-    timestamp: (new Date()).getTime(),
+    timestamp: new Date().getTime(),
   })
 
   isWaitingForResponse.value = true
@@ -158,7 +166,7 @@ const sendMessage = async (content: string) => {
   messages.value.push({
     role: 'assistant',
     content: response.data.content,
-    timestamp: (new Date()).getTime(),
+    timestamp: new Date().getTime(),
   })
 
   isWaitingForResponse.value = false

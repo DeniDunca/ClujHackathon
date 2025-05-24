@@ -6,6 +6,11 @@ import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
 
 // const darkMode = useDark()
+import { useAuthStore } from '@/stores/auth.ts'
+
+const authStore = useAuthStore()
+
+authStore.initialize()
 </script>
 
 <template>
