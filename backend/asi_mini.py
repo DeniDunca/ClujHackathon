@@ -9,7 +9,7 @@ MODEL = "asi1-mini"
 URL = "https://api.asi1.ai/v1/chat/completions"
 API_KEY = os.getenv('ASI_ONE_KEY')
 
-def call_asi_one_chatbot(messages):
+def call_asi_one_chatbot(messages, tokens):
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {API_KEY}'
@@ -21,7 +21,7 @@ def call_asi_one_chatbot(messages):
         "top_p": 1.0,
         "frequency_penalty": 0.0,
         "presence_penalty": 0.0,
-        "max_tokens": 500,
+        "max_tokens": tokens,
         "stream": False
     })
     response = requests.post(URL, headers=headers, data=payload)

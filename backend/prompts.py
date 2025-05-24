@@ -27,3 +27,8 @@ If the user asks follow-up or related questions, respond only using the context 
 Always stay empathetic, clear, and supportive. Do not offer diagnoses or medical advice beyond the questions listed above.
 """
 }
+
+DOCUMENT_DIAGNOSIS = {
+    "role":"user",
+    "content": """This is my recent diagnosis. Please take it in to account: """
+}

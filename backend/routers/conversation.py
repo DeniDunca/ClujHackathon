@@ -5,13 +5,15 @@ from datetime import datetime
 import json
 import logging
 from pydantic import BaseModel, validator, ConfigDict
+import aiohttp
+import asyncio
 
 from database import get_db
 from models import Conversation, Message, User, Patient
 from routers.auth import get_current_user, get_current_active_user
 from asi_mini import call_asi_one_chatbot
-from prompts import INITIAL_MESSAGE
-
+from prompts import INITIAL_MESSAGE, DOCUMENT_DIAGNOSIS
+from routers.upload_docs import get_user_files
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -188,7 +190,7 @@ def delete_conversation(
 
 # Add a message to a conversation
 @router.post("/{conversation_id}/messages", response_model=MessageResponse, status_code=status.HTTP_201_CREATED)
-def add_message(
+async def add_message(
     conversation_id: int,
     message: MessageCreate,
     current_user: User = Depends(get_current_user),
@@ -223,11 +225,28 @@ def add_message(
         formatted_history = []
         formatted_history.append(INITIAL_MESSAGE)
 
+        # Get user's uploaded files
+        uploaded_files = await get_user_files(current_user, db)
+        if uploaded_files:
+            # Fetch content from all text files concurrently
+            async with aiohttp.ClientSession() as session:
+                tasks = []
+                for file in uploaded_files:
+                    if file.text_file and file.text_file['url']:
+                        tasks.append(fetch_file_content(session, file.text_file['url']))
+                
+                if tasks:
+                    contents = await asyncio.gather(*tasks)
+                    for content in contents:
+                        if content:
+                            DOCUMENT_DIAGNOSIS['content'] += f"\n{content}"
+            formatted_history.append(DOCUMENT_DIAGNOSIS)
+
         for msg in messages:
             formatted_history.append({"role": "user" if msg.patient_id else "assistant", "content": msg.content})
 
         # Get assistant's response
-        response = call_asi_one_chatbot(formatted_history)
+        response = call_asi_one_chatbot(formatted_history, 500)
         assistant_reply = response
 
         # Save assistant's response
@@ -247,6 +266,19 @@ def add_message(
     except Exception as e:
         logger.error(f"Assistant error: {e}")
         raise HTTPException(status_code=500, detail="Assistant failed to respond")
+
+async def fetch_file_content(session: aiohttp.ClientSession, url: str) -> str:
+    """Fetch content from a text file URL."""
+    try:
+        async with session.get(url) as response:
+            if response.status == 200:
+                return await response.text()
+            else:
+                logger.error(f"Failed to fetch content from {url}: {response.status}")
+                return None
+    except Exception as e:
+        logger.error(f"Error fetching content from {url}: {str(e)}")
+        return None
 
 # Delete a message
 @router.delete("/messages/{message_id}", status_code=status.HTTP_204_NO_CONTENT)
