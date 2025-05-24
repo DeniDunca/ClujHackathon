@@ -8,7 +8,6 @@ from pydantic import BaseModel
 from routers.auth import get_current_active_user
 from dotenv import load_dotenv
 
-
 # Load environment variables
 load_dotenv()
 

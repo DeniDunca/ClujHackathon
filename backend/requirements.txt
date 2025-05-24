@@ -11,3 +11,7 @@ python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
 supabase
+google-auth-oauthlib 
+google-auth-httplib2 
+google-api-python-client
+alembic
