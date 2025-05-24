@@ -10,6 +10,7 @@ from database import get_db
 from models import Conversation, Message, User, Patient
 from routers.auth import get_current_user, get_current_active_user
 from asi_mini import call_asi_one_chatbot
+from prompts import INITIAL_MESSAGE
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -219,10 +220,11 @@ def add_message(
     try:
         # Fetch conversation history for context
         messages = db.query(Message).filter(Message.conversation_id == conversation_id).order_by(Message.timestamp.asc()).all()
-        formatted_history = [
-            {"role": "user" if msg.patient_id else "assistant", "content": msg.content}
-            for msg in messages
-        ]
+        formatted_history = []
+        formatted_history.append(INITIAL_MESSAGE)
+
+        for msg in messages:
+            formatted_history.append({"role": "user" if msg.patient_id else "assistant", "content": msg.content})
 
         # Get assistant's response
         response = call_asi_one_chatbot(formatted_history)
