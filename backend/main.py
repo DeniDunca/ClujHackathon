@@ -3,8 +3,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from database import engine
 import models
-from routers import auth, patient
-from fastapi.middleware.cors import CORSMiddleware
+from routers import auth
+from routers import upload_docs
 
 app = FastAPI(title="Healthonomics API")
 models.Base.metadata.create_all(bind=engine)
@@ -26,7 +26,7 @@ def root():
     return FileResponse("static/test.html")
 
 app.include_router(auth.router)
-app.include_router(patient.router)
+app.include_router(upload_docs.router)
 
 # @app.websocket("/ws")
 # async def websocket_endpoint(websocket: WebSocket):
