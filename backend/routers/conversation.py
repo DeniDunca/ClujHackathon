@@ -7,8 +7,9 @@ import logging
 from pydantic import BaseModel, validator, ConfigDict
 
 from database import get_db
-from models import Conversation, Message, User, VirtualAssistant, Patient
+from models import Conversation, Message, User, Patient
 from routers.auth import get_current_user
+from asi_mini import call_asi_one_chatbot
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -33,8 +34,8 @@ class MessageCreate(MessageBase):
 class MessageResponse(MessageBase):
     id: int
     conversation_id: int
-    sender_id: Optional[int]
-    sender_type: str
+    parent_message_id: Optional[int]
+    patient_id: Optional[int]
     timestamp: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -63,7 +64,6 @@ class ConversationCreate(ConversationBase):
 class ConversationResponse(ConversationBase):
     id: int
     user_id: int
-    agent_id: int
     start_time: datetime
     end_time: Optional[datetime]
     status: str
@@ -105,26 +105,12 @@ def create_conversation(
     if not isinstance(current_user, Patient):
         raise HTTPException(
             status_code=403,
-            detail="Only patients can create conversations with the virtual assistant"
+            detail="Only patients can create conversations"
         )
-    
-    # Get the default virtual assistant
-    agent = db.query(VirtualAssistant).filter(VirtualAssistant.is_active == True).first()
-    if not agent:
-        # Create default virtual assistant if none exists
-        agent = VirtualAssistant(
-            name="Health Assistant",
-            model_version="1.0",
-            capabilities=json.dumps(["health_consultation", "appointment_scheduling", "general_inquiry"])
-        )
-        db.add(agent)
-        db.commit()
-        db.refresh(agent)
 
     # Create new conversation
     db_conversation = Conversation(
         user_id=current_user.id,
-        agent_id=agent.id,
         context=json.dumps(conversation.context) if conversation.context else None
     )
     
@@ -132,7 +118,6 @@ def create_conversation(
     db.commit()
     db.refresh(db_conversation)
     
-    # Log the conversation object for debugging
     logger.debug(f"Created conversation: {db_conversation.__dict__}")
     
     return db_conversation
@@ -216,25 +201,50 @@ def add_message(
     # Verify user has access to this conversation
     if conversation.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to send messages in this conversation")
-    
-    # Create new message
-    db_message = Message(
+
+    # Save patient's question
+    question = Message(
         conversation_id=conversation_id,
-        sender_id=current_user.id,
-        sender_type='user',
+        patient_id=current_user.id,
         content=message.content,
         message_type=message.message_type,
         message_metadata=json.dumps(message.message_metadata) if message.message_metadata else None
     )
-    
-    db.add(db_message)
+    db.add(question)
     db.commit()
-    db.refresh(db_message)
-    
-    # Log the message object for debugging
-    logger.debug(f"Created message: {db_message.__dict__}")
-    
-    return db_message
+    db.refresh(question)
+
+    logger.debug(f"Patient question saved: {question.__dict__}")
+
+    try:
+        # Fetch conversation history for context
+        messages = db.query(Message).filter(Message.conversation_id == conversation_id).order_by(Message.timestamp.asc()).all()
+        formatted_history = [
+            {"role": "user" if msg.patient_id else "assistant", "content": msg.content}
+            for msg in messages
+        ]
+
+        # Get assistant's response
+        response = call_asi_one_chatbot(formatted_history)
+        assistant_reply = response
+
+        # Save assistant's response
+        answer = Message(
+            conversation_id=conversation_id,
+            parent_message_id=question.id,
+            content=assistant_reply,
+            message_type="text"
+        )
+        db.add(answer)
+        db.commit()
+        db.refresh(answer)
+
+        logger.debug(f"Assistant response saved: {answer.__dict__}")
+        return answer
+
+    except Exception as e:
+        logger.error(f"Assistant error: {e}")
+        raise HTTPException(status_code=500, detail="Assistant failed to respond")
 
 # Delete a message
 @router.delete("/messages/{message_id}", status_code=status.HTTP_204_NO_CONTENT)

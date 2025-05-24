@@ -80,27 +80,11 @@ class Doctor(User):
         'polymorphic_identity': 'doctor',
     }
 
-class VirtualAssistant(Base):
-    __tablename__ = "virtual_assistants"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, default="Health Assistant")
-    model_version = Column(String)
-    capabilities = Column(String)  # Store as JSON string
-    last_training_date = Column(DateTime, default=datetime.utcnow)
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    # Relationship with conversations
-    conversations = relationship("Conversation", back_populates="agent")
-
 class Conversation(Base):
     __tablename__ = "conversations"
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
-    agent_id = Column(Integer, ForeignKey('virtual_assistants.id', ondelete='CASCADE'))
     start_time = Column(DateTime, default=datetime.utcnow)
     end_time = Column(DateTime, nullable=True)
     status = Column(String, default="active")  # active, completed, archived
@@ -110,24 +94,24 @@ class Conversation(Base):
 
     # Relationships
     user = relationship("User", foreign_keys=[user_id], back_populates="conversations")
-    agent = relationship("VirtualAssistant", foreign_keys=[agent_id], back_populates="conversations")
-    messages = relationship("Message", back_populates="conversation")
+    messages = relationship("Message", back_populates="conversation", cascade="all, delete-orphan")
 
 class Message(Base):
     __tablename__ = "messages"
 
     id = Column(Integer, primary_key=True, index=True)
     conversation_id = Column(Integer, ForeignKey('conversations.id', ondelete='CASCADE'))
-    sender_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=True)
-    sender_type = Column(String)  # 'user' or 'assistant'
+    parent_message_id = Column(Integer, ForeignKey('messages.id', ondelete='SET NULL'), nullable=True)
+    patient_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=True)  # Only for patient questions
     content = Column(Text)
     timestamp = Column(DateTime, default=datetime.utcnow)
-    message_type = Column(String)  # text, image, file, etc.
+    message_type = Column(String, default="text")
     message_metadata = Column(String, nullable=True)  # Store as JSON string
 
     # Relationships
     conversation = relationship("Conversation", back_populates="messages")
-    sender = relationship("User", foreign_keys=[sender_id])
+    parent_message = relationship("Message", remote_side=[id], backref="response")
+    patient = relationship("User", foreign_keys=[patient_id])
 
 class Appointment(Base):
     __tablename__ = "appointments"
