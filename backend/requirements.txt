@@ -1,0 +1,6 @@
+# command: pip install -r requirements.txt
+fastapi
+uvicorn[standard]
+pydantic
+websockets
+
