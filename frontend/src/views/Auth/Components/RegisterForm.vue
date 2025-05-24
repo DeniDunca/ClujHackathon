@@ -63,7 +63,6 @@
           </FormItem>
         </FormField>
         <Button type="submit">{{ t('SIGN_UP') }}</Button>
-        <Button variant="outline" class="w-full">{{ t('SIGN_UP_WITH_GOOGLE') }}</Button>
         <div class="mt-4 text-center text-sm">
           {{ t('HAVE_ACCOUNT') }}
           <router-link to="/login" class="underline">{{ t('LOGIN') }}</router-link>
@@ -85,6 +84,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuthStore } from '@/stores/auth.ts'
 import FormSummaryMessage from '@/components/ui/form/FormSummaryMessage.vue'
 import { useI18n } from 'vue-i18n'
+import router from "@/router";
+import { toast } from 'vue-sonner'
 
 const { t } = useI18n()
 
@@ -133,12 +134,22 @@ type FormValues = z.infer<typeof schema>
 
 const form = useForm({
   validationSchema: toTypedSchema(schema),
-  name: 'login-form',
+  name: 'register-form',
 })
 
 const authStore = useAuthStore()
 
-const onSubmit = form.handleSubmit((values) => {
-  authStore.register(values)
+const onSubmit = form.handleSubmit(async (values) => {
+  const dataToSend = {
+    ...values,
+    first_name: values.firstName,
+    last_name: values.lastName,
+    role: 'patient',
+  }
+  const success = await authStore.register(dataToSend)
+  if (success) {
+    toast.success(t('REGISTER_SUCCESS'))
+    await router.push('/')
+  }
 })
 </script>

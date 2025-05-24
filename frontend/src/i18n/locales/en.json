@@ -15,6 +15,7 @@
   "PASSWORD": "Password",
   "FORGOT_PASSWORD": "Forgot your password?",
   "LOGIN_WITH_GOOGLE": "Login with Google",
+  "LOGIN_FAILED": "Login failed. Please check your credentials.",
   "NO_ACCOUNT": "Don't have an account?",
   "SIGN_UP": "Sign up",
   "EMAIL_REQUIRED": "Email is required.",

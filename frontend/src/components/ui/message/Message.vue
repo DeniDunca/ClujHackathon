@@ -33,13 +33,13 @@
         <p class="whitespace-pre-wrap break-words">{{ content }}</p>
       </div>
 
-<!--      &lt;!&ndash; Timestamp &ndash;&gt;-->
-<!--      <div-->
-<!--        v-if="timestamp"-->
-<!--        :class="cn('text-xs text-muted-foreground', role === 'user' ? 'text-right' : 'text-left')"-->
-<!--      >-->
-<!--        {{ formatTimestamp(timestamp) }}-->
-<!--      </div>-->
+      <!--      &lt;!&ndash; Timestamp &ndash;&gt;-->
+      <!--      <div-->
+      <!--        v-if="timestamp"-->
+      <!--        :class="cn('text-xs text-muted-foreground', role === 'user' ? 'text-right' : 'text-left')"-->
+      <!--      >-->
+      <!--        {{ formatTimestamp(timestamp) }}-->
+      <!--      </div>-->
     </div>
 
     <!-- User Avatar -->
