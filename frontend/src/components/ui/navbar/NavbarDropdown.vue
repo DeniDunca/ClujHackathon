@@ -1,25 +1,24 @@
-
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
       <Button variant="outline" size="icon">
-        <User class="w-4 h-4"/>
+        <User class="w-4 h-4" />
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent class="w-56">
-      <DropdownMenuLabel>{{t('MY_ACCOUNT')}}</DropdownMenuLabel>
+      <DropdownMenuLabel>{{ t('MY_ACCOUNT') }}</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
         <DropdownMenuItem>
-          <router-link to="/profile">{{t('PROFILE')}}</router-link>
+          <router-link to="/profile">{{ t('PROFILE') }}</router-link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <router-link to="/settings">{{t('SETTINGS')}}</router-link>
+          <router-link to="/settings">{{ t('SETTINGS') }}</router-link>
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
       <DropdownMenuItem>
-        <button @click="logout">{{t('LOGOUT')}}</button>
+        <button @click="logout">{{ t('LOGOUT') }}</button>
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>

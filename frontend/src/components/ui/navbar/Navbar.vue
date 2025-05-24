@@ -13,7 +13,7 @@
           <router-link to="/appointments">{{ t('APPOINTMENTS') }}</router-link>
         </li>
         <li>
-          <NavbarDropdown/>
+          <NavbarDropdown />
         </li>
       </ul>
     </div>
@@ -21,13 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import {Button} from '@/components/ui/button'
-import {useI18n} from 'vue-i18n'
+import { Button } from '@/components/ui/button'
+import { useI18n } from 'vue-i18n'
 
-import {useAuthStore} from '@/stores/auth.ts'
-import NavbarDropdown from "@/components/ui/navbar/NavbarDropdown.vue";
+import { useAuthStore } from '@/stores/auth.ts'
+import NavbarDropdown from '@/components/ui/navbar/NavbarDropdown.vue'
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 const authStore = useAuthStore()
 </script>
