@@ -1,6 +1,12 @@
 {
   "LOGIN": "Login",
   "LOGOUT": "Logout",
+  "HOME": "Home",
+  "DOCUMENTS": "Documents",
+  "APPOINTMENTS": "Appointments",
+  "PROFILE": "Profile",
+  "MY_ACCOUNT": "My account",
+  "SETTINGS": "Settings",
 
   "WELCOME_BACK": "Welcome back",
   "EMAIL": "Email",
