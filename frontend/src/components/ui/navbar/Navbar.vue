@@ -26,7 +26,7 @@
             </router-link>
           </li>
           <li>
-            <NavbarDropdown/>
+            <NavbarDropdown />
           </li>
         </ul>
       </div>
@@ -75,7 +75,7 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { useI18n } from 'vue-i18n'
-import { useMediaQuery, breakpointsTailwind } from "@vueuse/core"
+import { useMediaQuery, breakpointsTailwind } from '@vueuse/core'
 import {
   DropdownMenu,
   DropdownMenuContent,
