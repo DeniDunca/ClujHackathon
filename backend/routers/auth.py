@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from typing import Optional, Set
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -9,7 +9,7 @@ from database import get_db
 from models import User, Patient, Doctor
 import os
 from dotenv import load_dotenv
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 router = APIRouter(
     prefix="/auth",
@@ -35,6 +35,41 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # OAuth2 scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
+# Base user response model without sensitive fields
+class UserResponseBase(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    email: str
+    role: str
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+# Patient response model
+class PatientResponse(UserResponseBase):
+    date_of_birth: Optional[date] = None
+    gender: Optional[str] = None
+    phone_number: Optional[str] = None
+    address: Optional[str] = None
+    medical_history: Optional[str] = None
+    allergies: Optional[str] = None
+    current_medications: Optional[str] = None
+    emergency_contact: Optional[str] = None
+
+# Doctor response model
+class DoctorResponse(UserResponseBase):
+    specialization: Optional[str] = None
+    license_number: Optional[str] = None
+    years_of_experience: Optional[int] = None
+    hospital_affiliation: Optional[str] = None
+    phone_number: Optional[str] = None
+    address: Optional[str] = None
+    consultation_fee: Optional[float] = None
+    available_hours: Optional[str] = None
+
 class CreateUserRequest(BaseModel):
     first_name: str
     last_name: str
@@ -42,7 +77,7 @@ class CreateUserRequest(BaseModel):
     password: str
     role: str
     # Patient fields
-    date_of_birth: Optional[datetime] = None
+    date_of_birth: Optional[date] = None
     gender: Optional[str] = None
     phone_number: Optional[str] = None
     address: Optional[str] = None
@@ -61,6 +96,7 @@ class CreateUserRequest(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    user: UserResponseBase
 
 class TokenBlacklist(BaseModel):
     token: str
@@ -122,7 +158,7 @@ def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
         return None
     return user
 
-@router.post("/register", status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=UserResponseBase, status_code=status.HTTP_201_CREATED)
 async def create_user(user: CreateUserRequest, db: Session = Depends(get_db)):
     # Check if user already exists
     db_user = db.query(User).filter(User.email == user.email).first()
@@ -204,9 +240,17 @@ async def login_for_access_token(
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    
+    # Return user data without sensitive fields
+    user_response = UserResponseBase.model_validate(user)
+    
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": user_response
+    }
 
-@router.get("/me")
+@router.get("/me", response_model=UserResponseBase)
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return current_user
 
