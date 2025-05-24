@@ -16,14 +16,19 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    firstname = Column(String)
-    lastname = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
     email = Column(String, unique=True, index=True)
     password = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     is_active = Column(Boolean, default=True)
     role = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'user',
+        'polymorphic_on': 'role'
+    }
 
 class Patient(User):
     __tablename__ = "patients"
