@@ -28,12 +28,12 @@ const emits = defineEmits<Emits>()
 // Convert Date to CalendarDate for the reka-ui Calendar component
 const calendarDateValue = computed(() => {
   if (!props.modelValue) return null
-  
+
   const date = props.modelValue
   return new CalendarDate(
     date.getFullYear(),
     date.getMonth() + 1, // CalendarDate months are 1-based
-    date.getDate()
+    date.getDate(),
   )
 })
 
@@ -43,7 +43,7 @@ const onCalendarUpdate = (calendarDate: any) => {
     emits('update:modelValue', null)
     return
   }
-  
+
   // Convert CalendarDate to regular Date
   const jsDate = toDate(calendarDate)
   emits('update:modelValue', jsDate)
