@@ -16,6 +16,11 @@
       <div v-if="authStore.isAuthenticated">
         <ul class="flex flex-row gap-4 items-center">
           <li>
+            <router-link to="/chat" class="hover:text-primary transition-colors">
+              {{ t('CHATBOT') }}
+            </router-link>
+          </li>
+          <li>
             <router-link to="/documents" class="hover:text-primary transition-colors">
               {{ t('DOCUMENTS') }}
             </router-link>
