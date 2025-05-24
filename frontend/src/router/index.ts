@@ -10,6 +10,11 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+    {
+      path: '/appointments',
+      name: 'appointments',
+      component: import('../views/Appointment.vue'),
+    },
     ...authRoutes,
   ],
 })
