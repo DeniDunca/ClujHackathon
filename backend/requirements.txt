@@ -3,4 +3,11 @@ fastapi
 uvicorn[standard]
 pydantic
 websockets
-
+email-validator
+sqlalchemy
+psycopg2-binary
+python-dotenv
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+supabase
