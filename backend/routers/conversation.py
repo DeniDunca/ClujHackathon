@@ -8,7 +8,7 @@ from pydantic import BaseModel, validator, ConfigDict
 
 from database import get_db
 from models import Conversation, Message, User, Patient
-from routers.auth import get_current_user
+from routers.auth import get_current_user, get_current_active_user
 from asi_mini import call_asi_one_chatbot
 
 # Set up logging
@@ -94,11 +94,30 @@ class ConversationResponse(ConversationBase):
             return [MessageResponse.from_orm(msg) for msg in v]
         return []
 
+# Get all conversations for the current user
+@router.get("/my-conversations", response_model=List[ConversationResponse])
+def get_user_conversations(
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    conversations = (
+        db.query(Conversation)
+        .options(joinedload(Conversation.messages))
+        .filter(Conversation.user_id == current_user.id)
+        .all()
+    )
+    
+    # Log the conversations for debugging
+    for conv in conversations:
+        logger.debug(f"Retrieved conversation: {conv.__dict__}")
+    
+    return conversations
+
 # Create a new conversation
 @router.post("/", response_model=ConversationResponse, status_code=status.HTTP_201_CREATED)
 def create_conversation(
     conversation: ConversationCreate,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     # Verify user is a patient
@@ -126,7 +145,7 @@ def create_conversation(
 @router.get("/{conversation_id}", response_model=ConversationResponse)
 def get_conversation(
     conversation_id: int,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_active_user),
     db: Session = Depends(get_db)
 ):
     conversation = (
@@ -146,25 +165,6 @@ def get_conversation(
     logger.debug(f"Retrieved conversation: {conversation.__dict__}")
     
     return conversation
-
-# Get all conversations for the current user
-@router.get("/my-conversations", response_model=List[ConversationResponse])
-def get_user_conversations(
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    conversations = (
-        db.query(Conversation)
-        .options(joinedload(Conversation.messages))
-        .filter(Conversation.user_id == current_user.id)
-        .all()
-    )
-    
-    # Log the conversations for debugging
-    for conv in conversations:
-        logger.debug(f"Retrieved conversation: {conv.__dict__}")
-    
-    return conversations
 
 # Delete a conversation
 @router.delete("/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
