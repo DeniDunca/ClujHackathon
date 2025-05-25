@@ -60,6 +60,7 @@ import FormSummaryMessage from '@/components/ui/form/FormSummaryMessage.vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth.ts'
 import { computed } from 'vue'
+import {toast} from "vue-sonner";
 
 const { t } = useI18n()
 const authStore = useAuthStore()
@@ -72,6 +73,11 @@ const schema = z.object({
   fullName: z.string({ message: t('FULL_NAME_REQUIRED') }),
   email: z.string({ message: t('EMAIL_REQUIRED') }).email(t('EMAIL_INVALID')),
   preferredDate: z.coerce.date({ message: t('PREFERRED_DATE_REQUIRED') }),
+}).refine((data) => {
+  return data.preferredDate >= new Date()
+}, {
+  message: t('PREFERRED_DATE_MUST_BE_IN_THE_FUTURE'),
+  path: ['preferredDate'],
 })
 
 const form = useForm({
@@ -84,6 +90,6 @@ const form = useForm({
 })
 
 const onSubmit = form.handleSubmit(async (data) => {
-  console.log(data)
+  toast.success(t('APPOINTMENT_CREATED'))
 })
 </script>

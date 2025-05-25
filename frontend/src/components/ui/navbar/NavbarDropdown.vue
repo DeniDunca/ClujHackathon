@@ -12,9 +12,9 @@
         <DropdownMenuItem>
           <router-link to="/profile">{{ t('PROFILE') }}</router-link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <router-link to="/settings">{{ t('SETTINGS') }}</router-link>
-        </DropdownMenuItem>
+<!--        <DropdownMenuItem>-->
+<!--          <router-link to="/settings">{{ t('SETTINGS') }}</router-link>-->
+<!--        </DropdownMenuItem>-->
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
       <DropdownMenuItem>

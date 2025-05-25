@@ -57,10 +57,13 @@
   "FULL_NAME_REQUIRED": "Full name is required.",
   "PREFERRED_DATE": "Preferred date",
   "PREFERRED_DATE_REQUIRED": "Preferred date is required.",
+  "PREFERRED_DATE_MUST_BE_IN_THE_FUTURE": "Preferred date must be in the future.",
 
   "MENU": "Menu",
   "OPEN_MENU": "Open menu",
   "CLOSE_MENU": "Close menu",
+  "TOGGLE_DARK_MODE": "Toggle dark mode",
+  "LANGUAGE_UPDATED": "Language updated successfully",
 
   "HEALTH_NAVIGATOR": "Health\n Navigator",
   "HEALTH_NAVIGATOR_DESCRIPTION": "AI-powered health navigator for oncological patients — offering personalized prevention guidance, triage support, and medical document analysis through an intelligent chatbot, empowering users to take informed steps toward their care.",
@@ -130,5 +133,39 @@
   "FILE_UPLOAD_SUCCESS": "File uploaded successfully!",
   "FILE_UPLOAD_ERROR": "Failed to upload file. Please try again.",
   "UPLOADING": "Uploading...",
-  "UPLOAD_DOCUMENT": "Upload Document"
+  "UPLOAD_DOCUMENT": "Upload Document",
+  "EXISTING_DOCUMENTS": "Existing Documents",
+  "UPLOADED_ON": "Uploaded on",
+  "NO_DOCUMENTS": "No documents uploaded yet.",
+  "LOADING": "Loading...",
+
+  "INFORMATION": "Information",
+  "PERSONAL_INFORMATION": "Personal Information",
+  "ACCOUNT_INFORMATION": "Account Information",
+  "USER_ID": "User ID",
+  "ROLE": "Role",
+  "MEMBER_SINCE": "Member since",
+  "LAST_UPDATED": "Last updated",
+
+  "PREFERENCES": "Preferences",
+  "DARK_MODE": "Dark mode",
+  "DARK_MODE_DESCRIPTION": "Toggle between light and dark themes",
+  "LANGUAGE": "Language",
+  "LANGUAGE_DESCRIPTION": "Select your preferred language",
+  "ENGLISH": "English",
+
+  "DANGER_ZONE": "Danger Zone",
+  "ERASE_MY_DATA": "Erase my data",
+  "ERASE_DATA_DESCRIPTION": "Permanently delete your account and all associated data. This action cannot be undone.",
+  "CONFIRM_DELETE_ACCOUNT": "Are you sure you want to delete your account?",
+  "DELETE_ACCOUNT_WARNING": "This will permanently delete your account and all your data. This action cannot be undone.",
+  "CANCEL": "Cancel",
+  "DELETE": "Delete",
+  "ACCOUNT_DELETED": "Account deleted successfully",
+  "DELETE_ACCOUNT_ERROR": "Failed to delete account. Please try again.",
+
+  "MANAGE_YOUR_ACCOUNT": "Manage your account settings and preferences",
+  "DATA_WAS_ERASED": "Your data was erased.",
+  "LANGUAGE_UPDATED": "Language updated successfully!",
+  "ROMANIAN": "Romanian"
 }

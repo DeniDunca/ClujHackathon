@@ -81,12 +81,13 @@ export const useAuthStore = defineStore('auth', () => {
         throw new Error('Failed to register')
       }
 
-      const response = await axios.post('auth/token', {
-        email: data.email,
-        password: data.password,
-      })
-      user.value = response.data.user
-      token.value = response.data.token
+      const formData = new FormData()
+      formData.append('username', data.email)
+      formData.append('password', data.password)
+
+      const response = await axios.post('auth/token', formData)
+      token.value = response.data['access_token']
+      tokenType.value = response.data['token_type']
 
       await initialize()
     } catch (e: Error | any) {

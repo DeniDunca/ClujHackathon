@@ -37,6 +37,12 @@ const router = createRouter({
       name: 'documents',
       component: import('../views/Documents.vue'),
     },
+    {
+      path: '/profile',
+      name: 'profile',
+      meta: { authOnly: true },
+      component: import('../views/Profile.vue'),
+    },
     ...authRoutes,
   ],
 })

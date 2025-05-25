@@ -147,6 +147,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     role: 'patient',
   }
   const success = await authStore.register(dataToSend)
+  console.log(success)
   if (success) {
     toast.success(t('REGISTER_SUCCESS'))
     await router.push('/')
