@@ -165,5 +165,8 @@
   "MANAGE_YOUR_ACCOUNT": "Gestionează setările și preferințele contului tău",
   "DATA_WAS_ERASED": "Datele tale au fost șterse.",
   "LANGUAGE_UPDATED": "Limba a fost actualizată cu succes!",
-  "ROMANIAN": "Română"
+  "ROMANIAN": "Română",
+
+  "REGISTER_SUCCESS": "Înregistrarea a fost realizată cu succes.",
+  "APPOINTMENT_CREATED": "Programarea a fost creată cu succes."
 }
