@@ -136,7 +136,7 @@ async def create_appointment(
             detail=f"Error creating appointment: {str(e)}"
         )
 
-@router.get("/", response_model=List[AppointmentResponse])
+@router.get("/my-appointments", response_model=List[AppointmentResponse])
 async def get_appointments(
     current_user: Annotated[User, Depends(get_current_active_user)],
     db: Session = Depends(get_db)
