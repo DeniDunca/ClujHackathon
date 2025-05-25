@@ -1,6 +1,6 @@
 <template>
-  <div class="container mx-auto p-6 max-w-md display-flex justify-between">
-    <div id="upload-document-form">
+  <div class="container mx-auto p-6 max-w-2xl justify-between flex flex-col lg:flex-row gap-4">
+    <div id="upload-document-form" class="min-w-xs">
       <h1 class="text-2xl font-bold mb-6">{{ t('UPLOAD_DOCUMENT') }}</h1>
 
       <Form @submit="onSubmit" class="flex flex-col gap-4">
@@ -12,7 +12,7 @@
             <FormControl>
               <Input
                 type="file"
-                accept=".pdf,.doc,.docx,.txt"
+                accept=".pdf"
                 v-bind="componentField"
                 @change="handleFileChange"
                 :disabled="isUploading"
@@ -28,11 +28,24 @@
       </Form>
     </div>
     <div id="existing-documents">
-      <div v-if="existingFiles === null">Null</div>
-      <div v-else-if="existingFiles.length === 0">No files</div>
+      <h1 class="text-xl font-semibold mb-6" v-if="existingFiles?.length !== 0">{{t('EXISTING_DOCUMENTS')}}</h1>
+      <div v-if="existingFiles === null">{{t('LOADING')}}</div>
+      <div v-else-if="existingFiles.length === 0">{{t('NO_DOCUMENTS')}}</div>
       <div v-else>
         <div v-for="file in existingFiles" :key="file.document_id">
-          <a :href="file.original_file.url" target="_blank">{{ file.original_file.filename }}</a>
+          <div class="flex flex-col gap-2 p-3 border rounded-lg hover:bg-muted/50 transition-colors mb-2">
+            <div class="flex gap-2 justify-start items-start">
+              <File class="h-4 w-4 mt-1 text-muted-foreground"/>
+              <div class="flex flex-col gap-1">
+                <span class="font-medium">
+                  {{ getOriginalFilename(file) }}
+                </span>
+                <span class="text-sm text-muted-foreground">
+                  {{ t('UPLOADED_ON') }}: {{ getUploadDate(file.created_at) }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -58,12 +71,28 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'vue-sonner'
 import axios from 'axios'
+import {File} from 'lucide-vue-next'
+import { getUploadDate } from '@/lib/utils'
+
+type FileInfo = {
+  document_id: string
+  original_file: {
+    filename: string
+    url: string
+  }
+  text_file: {
+    filename: string
+    url: string
+  }
+  created_at: string
+  last_accessed_at: string
+}
 
 const { t } = useI18n()
 
 const selectedFile = ref<File | null>(null)
 const isUploading = ref(false)
-const existingFiles = ref(null)
+const existingFiles = ref<FileInfo[] | null>(null)
 
 const schema = z.object({
   file: z.any().refine((file) => file instanceof File, {
@@ -135,4 +164,8 @@ const getExistingFiles = async () => {
 onBeforeMount(async () => {
   await getExistingFiles()
 })
+
+const getOriginalFilename = (file: FileInfo) => {
+  return file.original_file.filename.split('/').pop()
+}
 </script>

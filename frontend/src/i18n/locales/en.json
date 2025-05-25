@@ -130,5 +130,9 @@
   "FILE_UPLOAD_SUCCESS": "File uploaded successfully!",
   "FILE_UPLOAD_ERROR": "Failed to upload file. Please try again.",
   "UPLOADING": "Uploading...",
-  "UPLOAD_DOCUMENT": "Upload Document"
+  "UPLOAD_DOCUMENT": "Upload Document",
+  "EXISTING_DOCUMENTS": "Existing Documents",
+  "UPLOADED_ON": "Uploaded on",
+  "NO_DOCUMENTS": "No documents uploaded yet.",
+  "LOADING": "Loading..."
 }
