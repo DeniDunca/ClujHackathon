@@ -10,12 +10,12 @@
           <FormItem>
             <FormLabel>{{ t('UPLOAD_FILE') }}</FormLabel>
             <FormControl>
-              <Input
+              <input
                 type="file"
                 accept=".pdf"
-                v-bind="componentField"
                 @change="handleFileChange"
                 :disabled="isUploading"
+                class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
               />
             </FormControl>
             <FormMessage />
@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import {onBeforeMount, ref} from 'vue'
+import {onBeforeMount, onBeforeUnmount, ref} from 'vue'
 import { useI18n } from 'vue-i18n'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
@@ -90,9 +90,10 @@ type FileInfo = {
 
 const { t } = useI18n()
 
-const selectedFile = ref<File | null>(null)
+const selectedFile = ref<globalThis.File | null>(null)
 const isUploading = ref(false)
 const existingFiles = ref<FileInfo[] | null>(null)
+const isComponentMounted = ref(true)
 
 const schema = z.object({
   file: z.any().refine((file) => file instanceof File, {
@@ -138,12 +139,10 @@ const onSubmit = form.handleSubmit(async (values) => {
       // Reset form
       selectedFile.value = null
       form.resetForm()
-      // Reset file input
-      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
-      if (fileInput) {
-        fileInput.value = ''
+      // Only refresh files if component is still mounted
+      if (isComponentMounted.value) {
+        await getExistingFiles()
       }
-      await getExistingFiles()
     }
   } catch (error) {
     console.error('Upload error:', error)
@@ -156,7 +155,10 @@ const onSubmit = form.handleSubmit(async (values) => {
 const getExistingFiles = async () => {
   try {
     const response = await axios.get('/upload/files')
-    existingFiles.value = response.data
+    // Only update if component is still mounted
+    if (isComponentMounted.value) {
+      existingFiles.value = response.data
+    }
   } catch (error) {
     console.error('Error fetching files:', error)
   }
@@ -164,6 +166,10 @@ const getExistingFiles = async () => {
 
 onBeforeMount(async () => {
   await getExistingFiles()
+})
+
+onBeforeUnmount(() => {
+  isComponentMounted.value = false
 })
 
 const getOriginalFilename = (file: FileInfo) => {
