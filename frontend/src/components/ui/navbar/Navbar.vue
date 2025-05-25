@@ -8,7 +8,25 @@
 
     <!-- Desktop Navigation -->
     <div v-if="!isSmallScreen" class="flex items-center gap-4">
-      <div id="auth" v-if="!authStore.isAuthenticated">
+      <div id="auth" v-if="!authStore.isAuthenticated" class="flex items-center gap-4">
+        <!-- Dark Mode Toggle -->
+        <Button variant="outline" size="icon" @click="toggleDark" :aria-label="t('TOGGLE_DARK_MODE')">
+          <Sun v-if="isDark" class="w-4 h-4" />
+          <Moon v-else class="w-4 h-4" />
+        </Button>
+
+        <!-- Language Selector -->
+        <Select v-model="selectedLanguage" @update:model-value="changeLanguage">
+          <SelectTrigger class="w-[120px]">
+            <SelectValue :placeholder="t('LANGUAGE')" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en">{{ t('ENGLISH') }}</SelectItem>
+            <SelectItem value="ro">{{ t('ROMANIAN') }}</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <!-- Login Button -->
         <Button as-child>
           <router-link to="/login">{{ t('LOGIN') }}</router-link>
         </Button>
@@ -47,6 +65,30 @@
         </DropdownMenuTrigger>
         <DropdownMenuContent class="w-56" align="end">
           <template v-if="!authStore.isAuthenticated">
+            <!-- Dark Mode Toggle -->
+            <DropdownMenuItem @click="toggleDark" class="flex items-center justify-between">
+              <span>{{ t('DARK_MODE') }}</span>
+              <div class="flex items-center">
+                <Sun v-if="isDark" class="w-4 h-4" />
+                <Moon v-else class="w-4 h-4" />
+              </div>
+            </DropdownMenuItem>
+
+            <!-- Language Selector -->
+            <DropdownMenuItem @click.prevent class="flex items-center justify-between">
+              <span>{{ t('LANGUAGE') }}</span>
+              <Select v-model="selectedLanguage" @update:model-value="changeLanguage">
+                <SelectTrigger class="w-[80px] h-6">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="en">{{ t('ENGLISH') }}</SelectItem>
+                </SelectContent>
+              </Select>
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
             <DropdownMenuItem>
               <router-link to="/login" class="w-full">{{ t('LOGIN') }}</router-link>
             </DropdownMenuItem>
@@ -78,9 +120,11 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import { useI18n } from 'vue-i18n'
-import { useMediaQuery, breakpointsTailwind } from '@vueuse/core'
+import { useMediaQuery, breakpointsTailwind, useDark, useToggle } from '@vueuse/core'
+import { toast } from 'vue-sonner'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -89,16 +133,40 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Menu } from 'lucide-vue-next'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Menu, Sun, Moon } from 'lucide-vue-next'
 
 import { useAuthStore } from '@/stores/auth.ts'
 import NavbarDropdown from '@/components/ui/navbar/NavbarDropdown.vue'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const isSmallScreen = useMediaQuery(`(max-width: ${breakpointsTailwind.sm}px)`)
 
 const authStore = useAuthStore()
+
+// Dark mode functionality
+const isDark = useDark({
+  selector: 'html',
+  attribute: 'class',
+  valueDark: 'dark',
+  valueLight: '',
+})
+
+const toggleDark = () => {
+  isDark.value = !isDark.value
+}
+
+// Language functionality
+const selectedLanguage = ref(locale.value)
+
+const changeLanguage = (newLocale: string) => {
+  locale.value = newLocale
+  selectedLanguage.value = newLocale
+  // Persist language preference
+  localStorage.setItem('preferred-language', newLocale)
+  toast.success(t('LANGUAGE_UPDATED'))
+}
 
 const logout = async () => {
   console.log('Logging out')

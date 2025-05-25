@@ -62,6 +62,8 @@
   "MENU": "Menu",
   "OPEN_MENU": "Open menu",
   "CLOSE_MENU": "Close menu",
+  "TOGGLE_DARK_MODE": "Toggle dark mode",
+  "LANGUAGE_UPDATED": "Language updated successfully",
 
   "HEALTH_NAVIGATOR": "Health\n Navigator",
   "HEALTH_NAVIGATOR_DESCRIPTION": "AI-powered health navigator for oncological patients — offering personalized prevention guidance, triage support, and medical document analysis through an intelligent chatbot, empowering users to take informed steps toward their care.",
