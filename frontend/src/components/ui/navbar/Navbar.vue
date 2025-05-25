@@ -63,9 +63,9 @@
             <DropdownMenuItem>
               <router-link to="/profile" class="w-full">{{ t('PROFILE') }}</router-link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <router-link to="/settings" class="w-full">{{ t('SETTINGS') }}</router-link>
-            </DropdownMenuItem>
+<!--            <DropdownMenuItem>-->
+<!--              <router-link to="/settings" class="w-full">{{ t('SETTINGS') }}</router-link>-->
+<!--            </DropdownMenuItem>-->
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <button @click="logout" class="w-full text-left">{{ t('LOGOUT') }}</button>
