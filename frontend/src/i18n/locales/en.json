@@ -163,5 +163,7 @@
   "DELETE_ACCOUNT_ERROR": "Failed to delete account. Please try again.",
 
   "MANAGE_YOUR_ACCOUNT": "Manage your account settings and preferences",
-  "DATA_WAS_ERASED": "Your data was erased."
+  "DATA_WAS_ERASED": "Your data was erased.",
+  "LANGUAGE_UPDATED": "Language updated successfully!",
+  "ROMANIAN": "Romanian"
 }

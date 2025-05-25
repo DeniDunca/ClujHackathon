@@ -66,6 +66,7 @@
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="en">{{ t('ENGLISH') }}</SelectItem>
+                  <SelectItem value="ro">{{ t('ROMANIAN') }}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -130,7 +131,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import ReadonlyValue from '@/components/ui/ReadonlyValue.vue'
+import {ReadonlyValue} from '@/components/ui/readonly-value'
 
 // Stores and utilities
 import { useAuthStore } from '@/stores/auth'
@@ -159,7 +160,7 @@ const changeLanguage = (newLocale: any) => {
   selectedLanguage.value = newLocale
   // You can add localStorage persistence here if needed
   localStorage.setItem('preferred-language', newLocale)
-  toast.success('Language updated successfully')
+  toast.success(t('LANGUAGE_UPDATED'))
 }
 
 // Delete account functionality

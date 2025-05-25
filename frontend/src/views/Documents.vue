@@ -35,7 +35,7 @@
         <div v-for="file in existingFiles" :key="file.document_id">
           <div class="flex flex-col gap-2 p-3 border rounded-lg hover:bg-muted/50 transition-colors mb-2">
             <div class="flex gap-2 justify-start items-start">
-              <File class="h-4 w-4 mt-1 text-muted-foreground"/>
+              <FileIcon class="h-4 w-4 mt-1 text-muted-foreground"/>
               <div class="flex flex-col gap-1">
                 <span class="font-medium">
                   {{ getOriginalFilename(file) }}
@@ -71,7 +71,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'vue-sonner'
 import axios from 'axios'
-import {File} from 'lucide-vue-next'
+import {File as FileIcon} from 'lucide-vue-next'
 import { getUploadDate } from '@/lib/utils'
 
 type FileInfo = {
@@ -143,6 +143,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       if (fileInput) {
         fileInput.value = ''
       }
+      await getExistingFiles()
     }
   } catch (error) {
     console.error('Upload error:', error)
