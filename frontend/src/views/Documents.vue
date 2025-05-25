@@ -1,35 +1,46 @@
 <template>
-  <div class="container mx-auto p-6 max-w-md">
-    <h1 class="text-2xl font-bold mb-6">{{ t('UPLOAD_DOCUMENT') }}</h1>
+  <div class="container mx-auto p-6 max-w-md display-flex justify-between">
+    <div id="upload-document-form">
+      <h1 class="text-2xl font-bold mb-6">{{ t('UPLOAD_DOCUMENT') }}</h1>
 
-    <Form @submit="onSubmit" class="flex flex-col gap-4">
-      <FormSummaryMessage />
+      <Form @submit="onSubmit" class="flex flex-col gap-4">
+        <FormSummaryMessage />
 
-      <FormField v-slot="{ componentField }" name="file">
-        <FormItem>
-          <FormLabel>{{ t('UPLOAD_FILE') }}</FormLabel>
-          <FormControl>
-            <Input
-              type="file"
-              accept=".pdf,.doc,.docx,.txt"
-              v-bind="componentField"
-              @change="handleFileChange"
-              :disabled="isUploading"
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      </FormField>
+        <FormField v-slot="{ componentField }" name="file">
+          <FormItem>
+            <FormLabel>{{ t('UPLOAD_FILE') }}</FormLabel>
+            <FormControl>
+              <Input
+                type="file"
+                accept=".pdf,.doc,.docx,.txt"
+                v-bind="componentField"
+                @change="handleFileChange"
+                :disabled="isUploading"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
 
-      <Button type="submit" class="w-full">
-        {{ isUploading ? t('UPLOADING') : t('SUBMIT') }}
-      </Button>
-    </Form>
+        <Button type="submit" class="w-full">
+          {{ isUploading ? t('UPLOADING') : t('SUBMIT') }}
+        </Button>
+      </Form>
+    </div>
+    <div id="existing-documents">
+      <div v-if="existingFiles === null">Null</div>
+      <div v-else-if="existingFiles.length === 0">No files</div>
+      <div v-else>
+        <div v-for="file in existingFiles" :key="file.document_id">
+          <a :href="file.original_file.url" target="_blank">{{ file.original_file.filename }}</a>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import {onBeforeMount, ref} from 'vue'
 import { useI18n } from 'vue-i18n'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
@@ -52,6 +63,7 @@ const { t } = useI18n()
 
 const selectedFile = ref<File | null>(null)
 const isUploading = ref(false)
+const existingFiles = ref(null)
 
 const schema = z.object({
   file: z.any().refine((file) => file instanceof File, {
@@ -109,5 +121,18 @@ const onSubmit = form.handleSubmit(async (values) => {
   } finally {
     isUploading.value = false
   }
+})
+
+const getExistingFiles = async () => {
+  try {
+    const response = await axios.get('/upload/files')
+    existingFiles.value = response.data
+  } catch (error) {
+    console.error('Error fetching files:', error)
+  }
+}
+
+onBeforeMount(async () => {
+  await getExistingFiles()
 })
 </script>
