@@ -229,9 +229,14 @@ async def add_message(
         formatted_history = []
         formatted_history.append(INITIAL_MESSAGE)
 
-        # Get user's uploaded files
+        # Get user's uploaded files and their content
         uploaded_files = await get_user_files(current_user, db)
         if uploaded_files:
+            # Create a copy of DOCUMENT_DIAGNOSIS to avoid modifying the original
+            document_diagnosis = DOCUMENT_DIAGNOSIS.copy()
+            document_diagnosis['content'] = ""  # Reset content
+            logger.debug(f"Document diagnosis: {document_diagnosis}")
+
             # Fetch content from all text files concurrently
             async with aiohttp.ClientSession() as session:
                 tasks = []
@@ -243,11 +248,18 @@ async def add_message(
                     contents = await asyncio.gather(*tasks)
                     for content in contents:
                         if content:
-                            DOCUMENT_DIAGNOSIS['content'] += f"\n{content}"
-            formatted_history.append(DOCUMENT_DIAGNOSIS)
+                            document_diagnosis['content'] += f"\n{content}"
+            
+            # Only append if we have content
+            if document_diagnosis['content']:
+                formatted_history.append(document_diagnosis)
 
+        # Add conversation history
         for msg in messages:
             formatted_history.append({"role": "user" if msg.patient_id else "assistant", "content": msg.content})
+
+        
+        logger.debug(f"Formatted history: {formatted_history}")
 
         # Get assistant's response
         response = call_asi_one_chatbot(formatted_history, 500)
