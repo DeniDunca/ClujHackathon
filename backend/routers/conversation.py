@@ -110,6 +110,10 @@ def get_user_conversations(
         .all()
     )
     
+    # Sort messages by timestamp for each conversation
+    for conv in conversations:
+        conv.messages.sort(key=lambda x: x.timestamp)
+    
     # Log the conversations for debugging
     for conv in conversations:
         logger.debug(f"Retrieved conversation: {conv.__dict__}")
