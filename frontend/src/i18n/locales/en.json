@@ -122,5 +122,13 @@
   "AGE_25_39": "25–39",
   "AGE_40_49": "40–49",
   "AGE_50_74": "50–74",
-  "HIGH_RISK_PATIENTS": "High-risk patients"
+  "HIGH_RISK_PATIENTS": "High-risk patients",
+
+  "UPLOAD_FILE": "Upload File",
+  "CHOOSE_FILE": "Choose file",
+  "FILE_REQUIRED": "Please select a file to upload.",
+  "FILE_UPLOAD_SUCCESS": "File uploaded successfully!",
+  "FILE_UPLOAD_ERROR": "Failed to upload file. Please try again.",
+  "UPLOADING": "Uploading...",
+  "UPLOAD_DOCUMENT": "Upload Document"
 }

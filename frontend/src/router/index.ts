@@ -32,6 +32,11 @@ const router = createRouter({
       name: 'documentation',
       component: import('../views/Documentation.vue'),
     },
+    {
+      path: '/documents',
+      name: 'documents',
+      component: import('../views/Documents.vue'),
+    },
     ...authRoutes,
   ],
 })

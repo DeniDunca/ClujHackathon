@@ -58,7 +58,7 @@
         </vue-markdown>
       </div>
 
-      <!--      &lt;!&ndash; Timestamp &ndash;&gt;-->
+      <!--      &lt;!&ndash; Timestamp &ndash;&gt;- ->
       <!--      <div-->
       <!--        v-if="timestamp"-->
       <!--        :class="cn('text-xs text-muted-foreground', role === 'user' ? 'text-right' : 'text-left')"-->
