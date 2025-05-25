@@ -166,6 +166,7 @@
 
   "MANAGE_YOUR_ACCOUNT": "Manage your account settings and preferences",
   "DATA_WAS_ERASED": "Your data was erased.",
-  "LANGUAGE_UPDATED": "Language updated successfully!",
-  "ROMANIAN": "Romanian"
+  "ROMANIAN": "Romanian",
+  "REGISTER_SUCCESS": "Registration successful. Please login.",
+  "APPOINTMENT_CREATED": "Appointment created successfully."
 }
