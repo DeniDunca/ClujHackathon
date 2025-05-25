@@ -12,7 +12,7 @@ from database import get_db
 from models import Conversation, Message, User, Patient
 from routers.auth import get_current_user, get_current_active_user
 from asi_mini import call_asi_one_chatbot
-from prompts import INITIAL_MESSAGE, DOCUMENT_DIAGNOSIS
+from prompts import INITIAL_MESSAGE, DOCUMENT_DIAGNOSIS, PROMPT_TO_ANSWER_FROM_PDF
 from routers.upload_docs import get_user_files
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -228,14 +228,13 @@ async def add_message(
         messages = db.query(Message).filter(Message.conversation_id == conversation_id).order_by(Message.timestamp.asc()).all()
         formatted_history = []
         formatted_history.append(INITIAL_MESSAGE)
+        
+        # Create a copy of DOCUMENT_DIAGNOSIS to avoid modifying the original
+        document_diagnosis = DOCUMENT_DIAGNOSIS.copy()
 
         # Get user's uploaded files and their content
         uploaded_files = await get_user_files(current_user, db)
         if uploaded_files:
-            # Create a copy of DOCUMENT_DIAGNOSIS to avoid modifying the original
-            document_diagnosis = DOCUMENT_DIAGNOSIS.copy()
-            document_diagnosis['content'] = ""  # Reset content
-            logger.debug(f"Document diagnosis: {document_diagnosis}")
 
             # Fetch content from all text files concurrently
             async with aiohttp.ClientSession() as session:
@@ -248,11 +247,14 @@ async def add_message(
                     contents = await asyncio.gather(*tasks)
                     for content in contents:
                         if content:
-                            document_diagnosis['content'] += f"\n{content}"
-            
-            # Only append if we have content
-            if document_diagnosis['content']:
-                formatted_history.append(document_diagnosis)
+                            r = call_asi_one_chatbot([
+                                PROMPT_TO_ANSWER_FROM_PDF,
+                                {"role": "user", "content": content}
+                            ], 1000)
+                            document_diagnosis['content'] += r
+                            logger.debug(f"Document diagnosis: {document_diagnosis}")
+
+            formatted_history.append(document_diagnosis)
 
         # Add conversation history
         for msg in messages:
