@@ -9,10 +9,10 @@
       </h3>
       <span class="flex gap-2">
         <router-link to="/login">
-          <Button>{{t('GET_STARTED')}}</Button>
+          <Button>{{ t('GET_STARTED') }}</Button>
         </router-link>
         <router-link to="/documentation">
-          <Button variant="outline">{{t('LEARN_MORE')}}</Button>
+          <Button variant="outline">{{ t('LEARN_MORE') }}</Button>
         </router-link>
       </span>
     </div>
