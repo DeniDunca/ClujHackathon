@@ -36,7 +36,10 @@ OncoGuide is a 24/7 virtual assistant designed to support cancer patients by off
 ---
 ## DEMO
 
-https://github.com/user-attachments/assets/2eda08b3-40e6-4479-a146-d6a3617b07c8
 
 
-![image](https://github.com/user-attachments/assets/75f493eb-cf4a-4b93-b2ac-a6317283b0df)
+https://github.com/user-attachments/assets/df051f26-88c7-4f7f-84a4-f2686c711426
+
+
+![image](https://github.com/user-attachments/assets/bfad7655-366a-4035-a161-59da6171cb4a)
+
