@@ -1,6 +1,6 @@
 ![image](https://github.com/user-attachments/assets/feb0e848-b395-4991-b310-177acfe0a08c)
 
-OncoGuide is a 24/7 virtual assistant designed to support cancer patients by offering early symptom screening, document analysis, educational resources, and personalized guidance. It does not provide diagnosis or treatment, but helps users understand medical terms, ask questions about their reports, and know when to consult a doctor. Built for both patients and clinics, OncoGuide bridges the gap between overwhelmed medical systems and people in need of clear, compassionate support.
+OncoGuide is a 24/7 virtual assistant designed to support cancer patients by offering early symptom screening, document analysis, educational resources, and personalized guidance. It does not provide diagnosis or treatment, but helps users understand medical terms, ask questions about their reports, and know when to consult a doctor. Built for both patients and clinics, OncoGuide bridges the gap between overwhelmed medical systems and people in need of clear, compassionate support. 
 
 
 ##  Key Features
